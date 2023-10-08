@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:herry_up/core/config/dependency_injection.dart';
+import 'package:herry_up/task1/view/signup_page.dart';
 
 void main() {
 WidgetsFlutterBinding.ensureInitialized();
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      home: SignUpPage(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
