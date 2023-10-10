@@ -2,10 +2,10 @@ import 'package:herry_up/core/config/dependency_injection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthServiceMock{
-bool success = false;
+static bool success = true;
 
 
-signUp(String name,String password,String phone,String gender,String birthDate){
+static bool signUp(String name,String password,String phone,String gender,String birthDate){
   if (password.length > 8 && phone.length > 10 && name.length >4){
     success = true;
     
