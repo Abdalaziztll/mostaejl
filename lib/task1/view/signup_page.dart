@@ -98,11 +98,10 @@ suffixIcon: IconButton(
                       });
                     },
                     icon: isPressed == true
-                        ? const Icon(Icons.visibility,
-                        color: Color.fromARGB(255, 30, 116, 186),)
-                        : const Icon(Icons.visibility_off,
-                        color: Colors.grey),
+                        ? const Icon(Icons.visibility,color: Color.fromARGB(255, 30, 116, 186),)
+                        : const Icon(Icons.visibility_off,color: Colors.grey),
                   ),
+
             ),
             ),
           ),
