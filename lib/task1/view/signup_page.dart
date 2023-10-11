@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:herry_up/core/data/auth/auth.dart';
 import 'package:herry_up/task2/view/homepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class SignUpPage extends StatefulWidget {
@@ -21,9 +22,8 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController genderController = TextEditingController();
   TextEditingController birthdateController = TextEditingController();
   GlobalKey<FormState> formState = new GlobalKey<FormState>();
-  bool success = false;
+ 
   String text ="";
-  dynamic storage = "";
   bool isPressed = true;
   @override
   Widget build(BuildContext context) {
@@ -42,12 +42,12 @@ class _SignUpPageState extends State<SignUpPage> {
           SizedBox(width: 500,
             child: TextFormField(controller: textController,
             validator: (String? value) {
-                  if (value == "") {
-                    return "false";
-                  } else {
-                    return null;
-                  }
-                },
+                    if (textController.text.length < 4) {
+                      return 'false';
+                    } else {
+                      return null;
+                    }
+                  },
               decoration:InputDecoration(
               hintText: "Name",
               hintStyle: TextStyle(color: Colors.grey),
@@ -107,9 +107,9 @@ suffixIcon: IconButton(
           ),
            SizedBox(width: 500,
             child: TextFormField(controller: phoneController,
-validator: (value) {
-                    if (value!.isEmpty||!RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[(]{0,1}[-\s\./0-9]+$').hasMatch(value!) ) {
-                      return "false";
+validator: (String? value) {
+                    if (phoneController.text.length < 10) {
+                      return 'false';
                     } else {
                       return null;
                     }
@@ -194,20 +194,24 @@ size: 20,
             child: Center(
               child: TextButton(
                 onPressed: () {
-                  signUp(String name,String password,String phone,String gender,String birthDate){
-  if (password.length > 8 && phone.length > 10 && name.length >4){
-    success = true;
-    
-  }else {
-    success = false ;
-    
-  }
-  storage.get<SharedPreferences>().setBool('auth_state',success);
-
-  return success;
-
-  
-}
+                bool Sum = AuthServiceMock().signUp(
+                   textController.text.toString(),
+                     passwordController.text.toString(),
+                      phoneController.text.toString(),
+                       genderController.text.toString(),
+                        birthdateController.text.toString(),
+                    );
+                  print(Sum);
+                    if (formState.currentState!.validate()) {
+                      try {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomePage()));
+                      } catch (e) {
+                        return;
+                      }
+                    } else {}
                   var formdata = formState.currentState;
                   if (formdata!.validate()) {
                     Navigator.push(
