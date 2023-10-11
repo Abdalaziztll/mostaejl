@@ -203,28 +203,13 @@ size: 20,
                     );
                   print(Sum);
                     if (formState.currentState!.validate()) {
-                      try {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => HomePage()));
-                      } catch (e) {
                         return;
                       }
-                    } else {}
-                  var formdata = formState.currentState;
-                  if (formdata!.validate()) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return const HomePage();
-                        },
-                      ),
-                    );
-                  } else {
-                    print('Not valid');
-                  }
+                     else {}
                 },
                 child: Text(
                   'Sign Up',
