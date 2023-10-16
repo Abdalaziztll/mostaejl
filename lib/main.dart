@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:herry_up/core/config/dependency_injection.dart';
+import 'package:herry_up/task1/view/signup_page.dart';
 
 void main() {
 WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         colorSchemeSeed: const Color.fromARGB(255, 7, 135, 11)
       ),
+        home: SignUpPage(),
     );
   }
 }
