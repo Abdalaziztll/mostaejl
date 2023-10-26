@@ -1,84 +1,122 @@
-import 'package:bloc_session/bloc/event_example.dart';
-import 'package:bloc_session/bloc/manager_example.dart';
-import 'package:bloc_session/bloc/state_example.dart';
-import 'package:bloc_session/view/bloc/login_bloc.dart';
-import 'package:bloc_session/view/login_page.dart';
+
+import 'dart:async';
+
+import 'package:bloc_session/config/bloc_obesrve.dart';
+
+import 'package:bloc_session/model/question.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-
-  
-  runApp(const MyApp());
+  Bloc.observer = MyBlocObserver();
+  runApp(QuizApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+List<QuestionModel> questions = [
+  QuestionModel(
+      questionSentenc: 'How Long Are You ?',
+      description: 'This is an easy Question ...',
+      time: 3,
+      asnwers: [
+        Answer(asnwer: '20 m', isCorrect: false),
+        Answer(asnwer: '10 m', isCorrect: false),
+        Answer(asnwer: '5 m', isCorrect: false),
+        Answer(asnwer: '1.8 m', isCorrect: true)
+      ]),
+  QuestionModel(
+      questionSentenc: 'How Long Are You ?',
+      description: 'This is an easy Question ...',
+      time: 3,
+      asnwers: [
+        Answer(asnwer: '20 m', isCorrect: false),
+        Answer(asnwer: '10 m', isCorrect: false),
+        Answer(asnwer: '5 m', isCorrect: false),
+        Answer(asnwer: '1.8 m', isCorrect: true)
+      ])
+];
 
-  // This widget is the root of your application.
+class QuizApp extends StatefulWidget {
+  const QuizApp({super.key});
+
+  @override
+  State<QuizApp> createState() => _QuizAppState();
+}
+
+Timer timer = Timer(Duration(seconds: 1), () {});
+int start = 1;
+
+class _QuizAppState extends State<QuizApp> {
+  @override
+  void initState() {
+    void startTimer() {
+      const oneSec = const Duration(seconds: 1);
+      timer = new Timer.periodic(
+        oneSec,
+        (Timer timer) {
+          if (start == 0) {
+            setState(() {
+              timer.cancel();
+            });
+          } else {
+            setState(() {
+              start++;
+            });
+          }
+        },
+      );
+    }
+
+    startTimer();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home:  LogInPage()
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ExampleBloc(),
-      child: Builder(builder: (context) {
+      home: Builder(builder: (context) {
         return Scaffold(
-          appBar: AppBar(
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            title: Text(title),
-          ),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Text(
-                  'You have pushed the button this many times:',
+          body: PageView.builder(
+            itemCount: questions.length,
+            itemBuilder: (context, index) => Scaffold(
+              body: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ListTile(
+                      title: Text(questions[index].questionSentenc),
+                      subtitle: Text(questions[index].description),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: 300,
+                        height: 300,
+                        child: GridView.builder(
+                          itemCount: questions[index].asnwers.length,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                  crossAxisCount: 2),
+                          itemBuilder: (context, ind) => InkWell(
+                            onTap: () {
+                              
+                            },
+                            child: Container(
+                                width: 50,
+                                height: 50,
+                                color: Colors.grey[200],
+                                child: Center(
+                                    child: Text(questions[index]
+                                        .asnwers[ind]
+                                        .asnwer))),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-                BlocBuilder<ExampleBloc, ExampleState>(
-                  builder: (context, state) {
-                    if (state is EditNumber) {
-                      return Text(state.counter.toString());
-                    } else {
-                      return CircularProgressIndicator();
-                    }
-                  },
-                ),
-              ],
+              ),
             ),
-          ),
-          floatingActionButton: Row(
-            children: [
-              FloatingActionButton(
-                onPressed: () {
-                  context.read<ExampleBloc>().add(Increment());
-                },
-                tooltip: 'Increment',
-                child: const Icon(Icons.add),
-              ),
-              FloatingActionButton(
-                onPressed: () {
-                  context.read<ExampleBloc>().add(Decrement());
-                },
-                tooltip: 'decrement',
-                child: const Icon(Icons.minimize),
-              ),
-            ],
           ),
         );
       }),
